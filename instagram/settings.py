@@ -1,7 +1,5 @@
 import os
 
-from django.contrib.messages import constants as messages
-
 from decouple import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -121,14 +119,6 @@ LOGIN_REDIRECT_URL = '/'
 DATE_INPUT_FORMATS = '%d-%m-%Y'
 
 INTERNAL_IPS = ['127.0.0.1']
-
-MESSAGE_TAGS = {
-    messages.DEBUG: 'alert-info',
-    messages.INFO: 'alert-info',
-    messages.SUCCESS: 'alert-success',
-    messages.WARNING: 'alert-warning',
-    messages.ERROR: 'alert-danger',
-}
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'MEDIA')
 
