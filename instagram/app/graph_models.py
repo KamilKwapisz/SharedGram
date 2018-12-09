@@ -4,6 +4,7 @@ import pytz
 from neomodel import config
 from neomodel import StructuredNode, RelationshipTo, RelationshipFrom, StructuredRel
 from neomodel import StringProperty, IntegerProperty, UniqueIdProperty, DateTimeProperty
+from neomodel.cardinality import One
 
 config.DATABASE_URL = 'bolt://neo4j:neo4j@localhost:7687'
 
@@ -31,11 +32,6 @@ class User(StructuredNode):
 class Photo(StructuredNode):
     uid = UniqueIdProperty()
     name = StringProperty()
-    liked_by = RelationshipFrom('User', 'LIKED BY', model=Like)
-
-    @property
-    def likes_number(self):
-        return len(self.liked_by.all())
 
 
 class HashTag(StructuredNode):
@@ -52,3 +48,16 @@ class HashTag(StructuredNode):
             self.name_ = value
         else:
             self.name_ = "#" + value
+
+
+class Post(StructuredNode):
+    uid = UniqueIdProperty()
+    name = StringProperty()
+    photo = RelationshipTo('Photo', 'PHOTO', cardinality=One)
+    hashtags = RelationshipTo('HashTag', 'TAG')
+    description = StringProperty()
+    liked_by = RelationshipFrom('User', 'LIKED BY', model=Like)
+
+    @property
+    def likes_number(self):
+        return len(self.liked_by.all())
