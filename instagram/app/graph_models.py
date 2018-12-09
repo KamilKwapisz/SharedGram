@@ -3,7 +3,7 @@ import pytz
 
 from neomodel import config
 from neomodel import StructuredNode, RelationshipTo, RelationshipFrom, StructuredRel
-from neomodel import StringProperty, IntegerProperty, UniqueIdProperty, DateTimeProperty
+from neomodel import StringProperty, UniqueIdProperty, DateTimeProperty
 from neomodel.cardinality import One
 
 config.DATABASE_URL = 'bolt://neo4j:neo4j@localhost:7687'
