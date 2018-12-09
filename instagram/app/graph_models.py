@@ -50,12 +50,30 @@ class HashTag(StructuredNode):
             self.name_ = "#" + value
 
 
+class Comment(StructuredNode):
+    uid = UniqueIdProperty()
+    name_ = StringProperty()  # TODO change for author name
+    author = RelationshipTo('User', 'AUTHOR')
+    date = DateTimeProperty(
+        default=lambda: datetime.now(pytz.utc)
+    )
+
+    @property
+    def name(self):
+        return self.name_.lower() if self.name_ else None
+
+    @name.setter
+    def name(self, value):
+        self.name_ = value
+
+
 class Post(StructuredNode):
     uid = UniqueIdProperty()
     name = StringProperty()
     photo = RelationshipTo('Photo', 'PHOTO', cardinality=One)
     hashtags = RelationshipTo('HashTag', 'TAG')
     description = StringProperty()
+    comments = RelationshipTo('Comment', 'COMMENT')
     liked_by = RelationshipFrom('User', 'LIKED BY', model=Like)
 
     @property
