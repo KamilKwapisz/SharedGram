@@ -2,8 +2,8 @@ from datetime import datetime
 import pytz
 
 from neomodel import config
-from neomodel import StructuredNode, RelationshipTo, RelationshipFrom, StructuredRel
-from neomodel import StringProperty, UniqueIdProperty, DateTimeProperty
+from neomodel import StructuredNode, StructuredRel
+from neomodel import StringProperty, UniqueIdProperty, DateTimeProperty, RelationshipTo, RelationshipFrom
 from neomodel.cardinality import One
 
 config.DATABASE_URL = 'bolt://neo4j:neo4j@localhost:7687'
@@ -52,19 +52,15 @@ class HashTag(StructuredNode):
 
 class Comment(StructuredNode):
     uid = UniqueIdProperty()
-    name_ = StringProperty()  # TODO change for author name
     author = RelationshipTo('User', 'AUTHOR')
+    text = StringProperty()
     date = DateTimeProperty(
         default=lambda: datetime.now(pytz.utc)
     )
 
     @property
     def name(self):
-        return self.name_.lower() if self.name_ else None
-
-    @name.setter
-    def name(self, value):
-        self.name_ = value
+        return f"{self.author}'s comment" if self.author else None
 
 
 class Post(StructuredNode):
