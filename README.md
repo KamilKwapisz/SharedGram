@@ -9,8 +9,20 @@ Instagram clone written in Python, Django and React.js
 * [Piotr Socha](https://github.com/piotrs112)
 * [Jakub Przygodzki](https://github.com/Yazkard)
 * [Bartosz Sadowski](https://github.com/Sadaffi)
-* [Adam Suski]()
+* [Adam Suski](https://github.com/AdamSuski)
 * [Kamil Kwapisz](https://github.com/KamilKwapisz)
+
+## Description
+### Database - relationships
+* User -> Post
+* Comment -> Post
+* Comment -> Comment
+* User -> User (follow)
+* Like -> Post
+* Like -> Comment
+* User -> Comment
+
+to be continued
 
 ## License
 
