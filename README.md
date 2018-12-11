@@ -5,7 +5,7 @@ Instagram clone written in Python, Django and React.js
 ## Authors
 
 * [Monika Osiak](https://github.com/monika-osiak)
-* [Ewa Sławińska]()
+* [Ewa Sławińska](https://github.com/Ewa2707)
 * [Piotr Socha](https://github.com/piotrs112)
 * [Jakub Przygodzki](https://github.com/Yazkard)
 * [Bartosz Sadowski](https://github.com/Sadaffi)
