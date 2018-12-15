@@ -18,11 +18,8 @@ Instagram clone written in Python, Django and React.js
 * Comment -> Post
 * Comment -> Comment
 * User -> User (follow)
-* Like -> Post
 * Like -> Comment
 * User -> Comment
-
-to be continued
 
 ## License
 
