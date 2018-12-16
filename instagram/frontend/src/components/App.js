@@ -11,7 +11,7 @@ function tick() {
   );
   ReactDOM.render(
     element,
-    document.getElementById('root')
+    document.getElementById('app')
   );
 }
 

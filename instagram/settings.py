@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'instagram.app',
+    'instagram.frontend',
 ]
 
 MIDDLEWARE = [
@@ -127,4 +128,3 @@ SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = 'DENY'
 
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # One month
-
