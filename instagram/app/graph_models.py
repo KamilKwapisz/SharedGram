@@ -23,10 +23,11 @@ class Like(StructuredRel):
 
 class User(StructuredNode):
     uid = UniqueIdProperty()
-    name = StringProperty
+    name = StringProperty()
     following = RelationshipTo('User', 'FOLLOWS', model=Follow)
     followers = RelationshipFrom('User', 'FOLLOWED BY', model=Follow)
     likes = RelationshipTo('Photo', 'LIKES', model=Like)
+    posts = RelationshipTo('Post', 'ADDED')
 
 
 class Photo(StructuredNode):
@@ -52,11 +53,14 @@ class HashTag(StructuredNode):
 
 class Comment(StructuredNode):
     uid = UniqueIdProperty()
-    author = RelationshipTo('User', 'AUTHOR')
+    author = RelationshipFrom('User', 'AUTHOR')
     text = StringProperty()
     date = DateTimeProperty(
         default=lambda: datetime.now(pytz.utc)
     )
+    post = RelationshipTo('Post', "COMMENT")
+    liked_by = RelationshipFrom('User', 'LIKED BY', model=Like)
+    commented_by = RelationshipFrom('Comment', 'COMMENTED BY')
 
     @property
     def name(self):
@@ -66,6 +70,7 @@ class Comment(StructuredNode):
 class Post(StructuredNode):
     uid = UniqueIdProperty()
     name = StringProperty()
+    author = RelationshipFrom('User', 'AUTHOR')
     photo = RelationshipTo('Photo', 'PHOTO', cardinality=One)
     hashtags = RelationshipTo('HashTag', 'TAG')
     description = StringProperty()
@@ -75,3 +80,5 @@ class Post(StructuredNode):
     @property
     def likes_number(self):
         return len(self.liked_by.all())
+# TODO on create - fetching hashtags from comments and creating HashTag model
+
