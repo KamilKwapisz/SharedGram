@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from django.views.generic import View
 
 from .forms import UserForm
+from .graph_models import *
 
 
 def index(request):
@@ -16,16 +17,14 @@ def index(request):
 
 def graphdb_test(request):
     """Just playground"""
-    from . import graph_models
-
     # db.set_connection('bolt://neo4j:neo4j@localhost:7687')
     # config.DATABASE_URL = 'bolt://neo4j:password@localhost:7687'
-    bucky = graph_models.User.nodes.get(name='Bucky')
-    jim = graph_models.User.nodes.get(name="Jim")
-    timmy = graph_models.User(name="Timothy").save()
+    bucky = User.nodes.get(name='Bucky')
+    jim = User.nodes.get(name="Jim")
+    timmy = User(name="Timothy").save()
     fol = jim.following.connect(bucky).save()
 
-    photo = graph_models.Photo.nodes.get(name="sea")
+    photo = Photo.nodes.get(name="sea")
     # photo.liked_by.connect(bucky).save()
     print(photo.likes_number)
     # rel = jim.friends.connect(User(name="Tim").save(), {'met': 'Warsaw'})
@@ -36,6 +35,37 @@ def graphdb_test(request):
     # rel.met = "Amsterdam"
     # rel.save()
     return render(request, "app/index.html", {})
+
+
+class PostCreateForm(View):
+    form_class = UserForm
+    template_name = "app/post_create.html"
+
+    def get(self, request):
+        """Displaying blank form"""
+        form = self.form_class(None)
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            description = form.cleaned_data['description']
+            username = self.request.user.username
+            user = User.nodes.get(name=username)
+            photo = Photo.nodes.get(name="sea")  # temporarily
+            Post(
+                name=name,
+                description=description,
+                photo=photo,
+                author=user
+            ).save()
+            messages.success(self.request, "Post has been added!")
+            return redirect('index')
+        else:
+            messages.error(self.request, "Invalid form")
+
+        return render(request, self.template_name, {'form': form})
 
 
 def create_and_authenticate_user(form):
@@ -80,6 +110,7 @@ class RegisterView(View):
             if are_passwords_matching(form):
                 user = create_and_authenticate_user(form)
                 if user is not None:
+                    User(name=user.username).save()
                     messages.success(self.request, "User has been created!")
                     login(self.request, user)
                     return redirect('index')
