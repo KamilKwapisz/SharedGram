@@ -2,7 +2,7 @@
 {% block body %}
 <ul>
     {% for post in posts %}
-        <li>{{post}}</li>
+    <li>[{{post.photo}}] {{post.name}}: {{post.description}}, ~<b>{{post.author}}</b></li>
     {% endfor %}
 </ul>
 {% endblock %}
