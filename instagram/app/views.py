@@ -1,13 +1,13 @@
 from django.contrib import messages
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, logout, login
+from django.contrib.auth import logout, login
 from django.views.decorators.debug import sensitive_post_parameters
 from django.utils.decorators import method_decorator
 from django.views.generic import View
 
 from .graph_models import *
 from .forms import UserForm, PostForm
-from .utils import create_post, create_user_node, delete_all_nodes
+from .utils import are_passwords_matching, create_post, create_user_node, delete_all_nodes
 
 config.DATABASE_URL = 'bolt://neo4j:password@localhost:7687'
 
@@ -25,23 +25,9 @@ def post_list(request):
 
 def graphdb_test(request):
     """Just playground"""
-    # db.set_connection('bolt://neo4j:neo4j@localhost:7687')
-    # config.DATABASE_URL = 'bolt://neo4j:password@localhost:7687'
-    bucky = User.nodes.get(name='Bucky')
-    jim = User.nodes.get(name="Jim")
-    timmy = User(name="Timothy").save()
-    fol = jim.following.connect(bucky).save()
-
-    photo = Photo.nodes.get(name="sea")
-    # photo.liked_by.connect(bucky).save()
-    print(photo.likes_number)
-    # rel = jim.friends.connect(User(name="Tim").save(), {'met': 'Warsaw'})
-    # rel = jim.friends.connect(User(name="Bucky").save(), {'met': 'Warsaw'})
-    # rel = jim.friends.connect(User(name="drWilk").save(), {'met': 'Warsaw'})
-    # # print(rel.start_node().name)  # jim
-    # # print(rel.end_node().name)  # bob
-    # rel.met = "Amsterdam"
-    # rel.save()
+    delete_all_nodes(User.nodes.filter(name="admin"))
+    create_user_node("admin")
+    print(User.nodes.get(name="admin"))
     return render(request, "app/index.html", {})
 
 
@@ -69,32 +55,6 @@ class PostCreateForm(View):
             messages.error(self.request, "Invalid form")
 
         return render(request, self.template_name, {'form': form})
-
-
-def create_and_authenticate_user(form):
-    """
-    Creates user object with cleaned data from django form.
-    Then user is authenticated with credentials provided in form
-    :param form: filled Django form instance
-    :return: user object if everything is correct, None otherwise
-    """
-    user_object = form.save(commit=False)
-    username = form.cleaned_data['username']
-    password = form.cleaned_data['password']
-    user_object.email = username
-    user_object.set_password(password)
-    user_object.save()
-    user = authenticate(username=username, password=password)
-    return user
-
-
-def are_passwords_matching(form) -> bool:
-    """
-    Checks whether password field and password confirm field have same value
-    :param form: filled Django form instance
-    :return: true if fields have same value, false otherwise
-    """
-    return form.cleaned_data['password'] == form.cleaned_data['password_confirm']
 
 
 class RegisterView(View):
