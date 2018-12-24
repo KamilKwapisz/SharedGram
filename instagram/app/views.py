@@ -18,7 +18,17 @@ def index(request):
 
 
 def post_list(request):
-    posts = Post.nodes
+    posts = list()
+    post_nodes = Post.nodes
+    for node in post_nodes:
+        # TODO fixing this so as we don't create new collection each time
+        post = dict(
+            name=node.name,
+            description=node.description,
+            photo=node.photo.single().name,
+            author=node.author.single().name
+        )
+        posts.append(post)
     context = dict(posts=posts)
     return render(request, 'app/post_list.html', context)
 
