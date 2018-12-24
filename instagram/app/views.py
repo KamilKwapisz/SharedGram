@@ -3,16 +3,24 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, logout, login
 from django.views.decorators.debug import sensitive_post_parameters
 from django.utils.decorators import method_decorator
-from django.urls import reverse_lazy
 from django.views.generic import View
 
-from .forms import UserForm
 from .graph_models import *
+from .forms import UserForm, PostForm
+from .utils import create_post, create_user_node, delete_all_nodes
+
+config.DATABASE_URL = 'bolt://neo4j:password@localhost:7687'
 
 
 def index(request):
     context = dict(username=request.user.username)
     return render(request, "app/index.html", context)
+
+
+def post_list(request):
+    posts = Post.nodes
+    context = dict(posts=posts)
+    return render(request, 'app/post_list.html', context)
 
 
 def graphdb_test(request):
@@ -38,7 +46,7 @@ def graphdb_test(request):
 
 
 class PostCreateForm(View):
-    form_class = UserForm
+    form_class = PostForm
     template_name = "app/post_create.html"
 
     def get(self, request):
@@ -52,16 +60,11 @@ class PostCreateForm(View):
             name = form.cleaned_data['name']
             description = form.cleaned_data['description']
             username = self.request.user.username
-            user = User.nodes.get(name=username)
+            author = User.nodes.get(name=username)
             photo = Photo.nodes.get(name="sea")  # temporarily
-            Post(
-                name=name,
-                description=description,
-                photo=photo,
-                author=user
-            ).save()
+            create_post(name, description, author, photo)
             messages.success(self.request, "Post has been added!")
-            return redirect('index')
+            return redirect('post-list')
         else:
             messages.error(self.request, "Invalid form")
 
@@ -110,7 +113,7 @@ class RegisterView(View):
             if are_passwords_matching(form):
                 user = create_and_authenticate_user(form)
                 if user is not None:
-                    User(name=user.username).save()
+                    create_user_node(user.username)
                     messages.success(self.request, "User has been created!")
                     login(self.request, user)
                     return redirect('index')
