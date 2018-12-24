@@ -11,5 +11,8 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('logout/', views.logout_view, name='logout'),
 
+    path('posts/', views.post_list, name="post-list"),
+    path('posts/add', views.PostCreateForm.as_view(), name="post-create"),
+
     path('test/', views.graphdb_test, name="test"),
 ]
