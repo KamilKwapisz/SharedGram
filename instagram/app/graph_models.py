@@ -64,7 +64,7 @@ class Comment(StructuredNode):
 
     @property
     def name(self):
-        return f"{self.author}'s comment" if self.author else None
+        return f"{self.author.name}'s comment" if self.author else None
 
 
 class Post(StructuredNode):

@@ -6,7 +6,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import View
 
 from .graph_models import *
-from .forms import UserForm, PostForm
+from .forms import CommentForm, UserForm, PostForm
 from .utils import are_passwords_matching, create_post, create_user_node, delete_all_nodes
 
 config.DATABASE_URL = 'bolt://neo4j:password@localhost:7687'
@@ -24,11 +24,14 @@ def post_list(request):
         # TODO fixing this so as we don't create new collection each time
         post = dict(
             name=node.name,
+            uid=node.uid,
             description=node.description,
             photo=node.photo.single().name,
-            author=node.author.single().name
+            author=node.author.single().name,
+            comments=node.comments.all()
         )
         posts.append(post)
+        print(node.comments.all())
     context = dict(posts=posts)
     return render(request, 'app/post_list.html', context)
 
@@ -41,7 +44,7 @@ def graphdb_test(request):
     return render(request, "app/index.html", {})
 
 
-class PostCreateForm(View):
+class PostCreate(View):
     form_class = PostForm
     template_name = "app/post_create.html"
 
@@ -65,6 +68,26 @@ class PostCreateForm(View):
             messages.error(self.request, "Invalid form")
 
         return render(request, self.template_name, {'form': form})
+
+
+def comment_create(request, post_uid):
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            author = User.nodes.get(name=request.user.username)
+            post = Post.nodes.get(uid=post_uid)
+            text = form.cleaned_data['comment_text']
+            comment = Comment(text=text).save()
+            comment.author.connect(author)
+            comment.post.connect(post)
+            comment.save()
+            post.comments.connect(comment)
+            post.save()
+            return redirect('post-list')
+    else:
+        form = CommentForm()
+
+    return render(request, 'app/comment_create.html', {'form': form})
 
 
 class RegisterView(View):

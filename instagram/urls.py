@@ -12,7 +12,8 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
 
     path('posts/', views.post_list, name="post-list"),
-    path('posts/add', views.PostCreateForm.as_view(), name="post-create"),
+    path('posts/<str:post_uid>/comment', views.comment_create, name="comment-create"),
+    path('posts/add', views.PostCreate.as_view(), name="post-create"),
 
     path('test/', views.graphdb_test, name="test"),
 ]
