@@ -13,5 +13,9 @@ class UserForm(ModelForm):
 
 class PostForm(Form):
     name = CharField()
-    description = CharField()
+    description = CharField(label='Description...', max_length=100)
     # photo =
+
+
+class CommentForm(Form):
+    comment_text = CharField(label='Add comment...', max_length=100)
