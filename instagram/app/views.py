@@ -41,7 +41,7 @@ def graphdb_test(request):
     return render(request, "app/index.html", {})
 
 
-class PostCreateForm(View):
+class PostCreate(View):
     form_class = PostForm
     template_name = "app/post_create.html"
 
@@ -65,6 +65,9 @@ class PostCreateForm(View):
             messages.error(self.request, "Invalid form")
 
         return render(request, self.template_name, {'form': form})
+
+
+class CommentCreate
 
 
 class RegisterView(View):
