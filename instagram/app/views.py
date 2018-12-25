@@ -6,7 +6,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import View
 
 from .graph_models import *
-from .forms import UserForm, PostForm
+from .forms import CommentForm, UserForm, PostForm
 from .utils import are_passwords_matching, create_post, create_user_node, delete_all_nodes
 
 config.DATABASE_URL = 'bolt://neo4j:password@localhost:7687'
@@ -24,11 +24,14 @@ def post_list(request):
         # TODO fixing this so as we don't create new collection each time
         post = dict(
             name=node.name,
+            uid=node.uid,
             description=node.description,
             photo=node.photo.single().name,
-            author=node.author.single().name
+            author=node.author.single().name,
+            comments=node.comments.all()
         )
         posts.append(post)
+        print(node.comments.all())
     context = dict(posts=posts)
     return render(request, 'app/post_list.html', context)
 
