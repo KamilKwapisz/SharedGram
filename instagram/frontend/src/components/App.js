@@ -3,15 +3,14 @@ import ReactDOM from "react-dom";
 //import DataProvider from "./DataProvider";
 //import Table from "./Table";
 function tick() {
-  const element = (
-    <div>
+  const element = <div>
       <h1>Hej bananki i karotki!</h1>
+      <h2>To component React'a!</h2>
       <h2>Jest {new Date().toLocaleTimeString()}.</h2>
-    </div>
-  );
-  ReactDOM.render(
+  </div>;
+    ReactDOM.render(
     element,
-    document.getElementById('root')
+    document.getElementById('app')
   );
 }
 
