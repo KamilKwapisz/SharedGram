@@ -16,4 +16,5 @@ urlpatterns = [
     path('posts/add', views.PostCreate.as_view(), name="post-create"),
 
     path('test/', views.graphdb_test, name="test"),
+    path('api', include('rest_framework.urls'))
 ]

@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'instagram.app',
     'instagram.frontend',
 ]
@@ -129,3 +130,8 @@ X_FRAME_OPTIONS = 'DENY'
 
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # One month
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
