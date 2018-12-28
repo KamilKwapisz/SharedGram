@@ -1,0 +1,14 @@
+/*fixme: make me an actual colorful ring*/
+div .activeStory {
+    background-color: blueviolet;
+    border: thick coral;
+}
+
+body{
+    background-color: antiquewhite;
+    padding: 70px 10px;
+}
+
+div .scrollable{
+    overflow: auto;
+}
