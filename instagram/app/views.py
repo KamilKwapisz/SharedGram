@@ -74,26 +74,6 @@ class PostCreate(View):
         return render(request, self.template_name, {'form': form})
 
 
-def comment_create(request, post_uid):
-    if request.method == 'POST':
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            author = User.nodes.get(name=request.user.username)
-            post = Post.nodes.get(uid=post_uid)
-            text = form.cleaned_data['comment_text']
-            comment = Comment(text=text).save()
-            comment.author.connect(author)
-            comment.post.connect(post)
-            comment.save()
-            post.comments.connect(comment)
-            post.save()
-            return redirect('post-list')
-    else:
-        form = CommentForm()
-
-    return render(request, 'app/comment_create.html', {'form': form})
-
-
 @api_view(['POST'])
 def rest_comment_add(request):
     try:
