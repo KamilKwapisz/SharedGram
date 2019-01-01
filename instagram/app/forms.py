@@ -9,13 +9,3 @@ class UserForm(ModelForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password']
-
-
-class PostForm(Form):
-    name = CharField()
-    description = CharField(label='Description...', max_length=100)
-    # photo =
-
-
-class CommentForm(Form):
-    comment_text = CharField(label='Add comment...', max_length=100)

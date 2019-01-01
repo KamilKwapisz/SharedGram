@@ -10,7 +10,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from .graph_models import *
-from .forms import CommentForm, UserForm, PostForm
+from .forms import UserForm, PostForm
 from .utils import are_passwords_matching, create_post, create_user_node, delete_all_nodes
 
 config.DATABASE_URL = 'bolt://neo4j:password@localhost:7687'
