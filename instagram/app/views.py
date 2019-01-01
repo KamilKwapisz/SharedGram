@@ -5,6 +5,10 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.utils.decorators import method_decorator
 from django.views.generic import View
 
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
 from .graph_models import *
 from .forms import CommentForm, UserForm, PostForm
 from .utils import are_passwords_matching, create_post, create_user_node, delete_all_nodes
@@ -88,6 +92,14 @@ def comment_create(request, post_uid):
         form = CommentForm()
 
     return render(request, 'app/comment_create.html', {'form': form})
+
+
+@api_view(['POST', 'GET'])
+def rest_comment_add(request):
+    if request.method == 'GET':
+        return Response({'hello': 'world'}, status=status.HTTP_200_OK)
+    return Response(request.data, status=status.HTTP_200_OK)
+
 
 
 class RegisterView(View):
