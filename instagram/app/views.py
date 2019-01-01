@@ -5,6 +5,10 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.utils.decorators import method_decorator
 from django.views.generic import View
 
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
 from .graph_models import *
 from .forms import CommentForm, UserForm, PostForm
 from .utils import are_passwords_matching, create_post, create_user_node, delete_all_nodes
@@ -88,6 +92,30 @@ def comment_create(request, post_uid):
         form = CommentForm()
 
     return render(request, 'app/comment_create.html', {'form': form})
+
+
+@api_view(['POST'])
+def rest_comment_add(request):
+    try:
+        author = User.nodes.get(name=request.data['username'])
+        post = Post.nodes.get(uid=request.data['post_uid'])
+        text = request.data['text']
+    except User.DoesNotExist:
+        msg = dict(message="User with this username doesn't exist")
+        return Response(msg, status=status.HTTP_403_FORBIDDEN)
+    except Post.DoesNotExist:
+        msg = dict(message="Post with this uid doesn't exist")
+        return Response(msg, status=status.HTTP_403_FORBIDDEN)
+    except KeyError as e:
+        msg = dict(message=f"Invalid request. No {e} key in request")
+        return Response(msg, status=status.HTTP_402_PAYMENT_REQUIRED)
+    comment = Comment(text=text).save()
+    comment.author.connect(author)
+    comment.post.connect(post)
+    comment.save()
+    post.comments.connect(comment)
+    post.save()
+    return Response({'message': "Success"}, status=status.HTTP_201_CREATED)
 
 
 class RegisterView(View):
