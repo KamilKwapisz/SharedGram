@@ -10,7 +10,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from .graph_models import *
-from .forms import UserForm, PostForm
+from .forms import UserForm
 from .utils import are_passwords_matching, create_post, create_user_node, delete_all_nodes
 
 config.DATABASE_URL = 'bolt://neo4j:password@localhost:7687'
@@ -46,32 +46,6 @@ def graphdb_test(request):
     create_user_node("admin")
     print(User.nodes.get(name="admin"))
     return render(request, "app/index.html", {})
-
-
-class PostCreate(View):
-    form_class = PostForm
-    template_name = "app/post_create.html"
-
-    def get(self, request):
-        """Displaying blank form"""
-        form = self.form_class(None)
-        return render(request, self.template_name, {'form': form})
-
-    def post(self, request):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            name = form.cleaned_data['name']
-            description = form.cleaned_data['description']
-            username = self.request.user.username
-            author = User.nodes.get(name=username)
-            photo = Photo.nodes.get(name="sea")  # temporarily
-            create_post(name, description, author, photo)
-            messages.success(self.request, "Post has been added!")
-            return redirect('post-list')
-        else:
-            messages.error(self.request, "Invalid form")
-
-        return render(request, self.template_name, {'form': form})
 
 
 @api_view(['POST'])
