@@ -12,9 +12,9 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
 
     path('posts/', views.post_list, name="post-list"),
-    path('posts/<str:post_uid>/comment', views.comment_create, name="comment-create"),
     path('posts/add', views.PostCreate.as_view(), name="post-create"),
     path('api/comment/add', views.rest_comment_add, name="api-comment-add"),
+    path('api/post/create', views.rest_post_create, name="api-post-create"),
 
     path('test/', views.graphdb_test, name="test"),
     path('api/', include('rest_framework.urls'))
