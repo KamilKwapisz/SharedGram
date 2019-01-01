@@ -75,6 +75,26 @@ class PostCreate(View):
 
 
 @api_view(['POST'])
+def rest_post_create(request):
+    try:
+        author = User.nodes.get(name=request.data['username'])
+        photo = Photo.nodes.get(name="sea")  # temporarily
+        name = request.data['name']
+        description = request.data['description']
+    except User.DoesNotExist:
+        msg = dict(message="User with this username doesn't exist")
+        return Response(msg, status=status.HTTP_403_FORBIDDEN)
+    except Photo.DoesNotExist:
+        msg = dict(message="Photo with this uid doesn't exist")
+        return Response(msg, status=status.HTTP_403_FORBIDDEN)
+    except KeyError as e:
+        msg = dict(message=f"Invalid request. No {e} key in request")
+        return Response(msg, status=status.HTTP_402_PAYMENT_REQUIRED)
+    create_post(name, description, author, photo)
+    return Response({'message': "Success"}, status=status.HTTP_201_CREATED)
+
+
+@api_view(['POST'])
 def rest_comment_add(request):
     try:
         author = User.nodes.get(name=request.data['username'])
