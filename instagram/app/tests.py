@@ -1,6 +1,8 @@
 from django.test import Client, tag, TestCase
 from django.urls import reverse
 
+from rest_framework import status
+
 from .graph_models import Post, User, Photo
 
 
@@ -32,8 +34,22 @@ class CommentAddTestCase(TestCase):
           "post_uid": self.post.uid
         }
         response = self.client.post(reverse('api-comment-add'), payload)
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['message'], "Success")
+
+    @tag('fast')
+    def test_adding_comment_with_invalid_post_uid(self):
+        payload: dict = {
+            "username": self.author.name,
+            "text": "Test comment text",
+            "post_uid": "This is definitely not a valid post uid"
+        }
+        response = self.client.post(reverse('api-comment-add'), payload)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN
+        self.assertEqual(response.data['message'], "Post with this uid doesn't exist")
+
+    
+
 
     # def tearDown(self):
         # TODO
