@@ -45,13 +45,16 @@ class CommentAddTestCase(TestCase):
             "post_uid": "This is definitely not a valid post uid"
         }
         response = self.client.post(reverse('api-comment-add'), payload)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response.data['message'], "Post with this uid doesn't exist")
 
-    
-
-
-    # def tearDown(self):
-        # TODO
-
-
+    @tag('fast')
+    def test_adding_comment_with_invalid_username(self):
+        payload: dict = {
+            "username": "404",
+            "text": "Test comment text",
+            "post_uid": self.post.uid
+        }
+        response = self.client.post(reverse('api-comment-add'), payload)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.data['message'], "User with this username doesn't exist")
