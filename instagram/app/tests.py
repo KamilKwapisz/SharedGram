@@ -1,4 +1,4 @@
-from django.test import Client, TestCase
+from django.test import Client, tag, TestCase
 from django.urls import reverse
 
 from .graph_models import Post, User, Photo
@@ -24,6 +24,7 @@ class CommentAddTestCase(TestCase):
             self.author = User.nodes.get(name=self.AUTHOR_NAME)
             self.photo = Photo.nodes.get(name=self.PHOTO_NAME)
 
+    @tag('fast')
     def test_adding_comment_with_proper_data(self):
         payload: dict = {
           "username": self.author.name,
