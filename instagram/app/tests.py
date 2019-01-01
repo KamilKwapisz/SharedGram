@@ -58,3 +58,14 @@ class CommentAddTestCase(TestCase):
         response = self.client.post(reverse('api-comment-add'), payload)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response.data['message'], "User with this username doesn't exist")
+
+    @tag('fast')
+    def test_adding_comment_without_obligatory_key(self):
+        payload: dict = {
+            "text": "Test comment text",
+            "post_uid": self.post.uid
+        }
+        missing_key = "username"
+        response = self.client.post(reverse('api-comment-add'), payload)
+        self.assertEqual(response.status_code, status.HTTP_402_PAYMENT_REQUIRED)
+        self.assertEqual(response.data['message'], f"Invalid request. No '{missing_key}' key in request")
