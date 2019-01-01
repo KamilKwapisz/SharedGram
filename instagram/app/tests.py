@@ -28,44 +28,64 @@ class CommentAddTestCase(TestCase):
 
     @tag('fast')
     def test_adding_comment_with_proper_data(self):
+        # Given
         payload: dict = {
           "username": self.author.name,
           "text": "Test comment text",
           "post_uid": self.post.uid
         }
+
+        # When
         response = self.client.post(reverse('api-comment-add'), payload)
+
+        # Then
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['message'], "Success")
 
     @tag('fast')
     def test_adding_comment_with_invalid_post_uid(self):
+        # Given
         payload: dict = {
             "username": self.author.name,
             "text": "Test comment text",
             "post_uid": "This is definitely not a valid post uid"
         }
+
+        # When
         response = self.client.post(reverse('api-comment-add'), payload)
+
+        # Then
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response.data['message'], "Post with this uid doesn't exist")
 
     @tag('fast')
     def test_adding_comment_with_invalid_username(self):
+        # Given
         payload: dict = {
             "username": "404",
             "text": "Test comment text",
             "post_uid": self.post.uid
         }
+
+        # When
         response = self.client.post(reverse('api-comment-add'), payload)
+
+        # Then
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response.data['message'], "User with this username doesn't exist")
 
     @tag('fast')
     def test_adding_comment_without_obligatory_key(self):
+        # Given
         payload: dict = {
             "text": "Test comment text",
             "post_uid": self.post.uid
         }
-        missing_key = "username"
+
+        # When
         response = self.client.post(reverse('api-comment-add'), payload)
+        missing_key = "username"
+
+        # Then
         self.assertEqual(response.status_code, status.HTTP_402_PAYMENT_REQUIRED)
         self.assertEqual(response.data['message'], f"Invalid request. No '{missing_key}' key in request")
