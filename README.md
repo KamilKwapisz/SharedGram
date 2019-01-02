@@ -12,15 +12,6 @@ Instagram clone written in Python, Django and React.js
 * [Adam Suski](https://github.com/AdamSuski)
 * [Kamil Kwapisz](https://github.com/KamilKwapisz)
 
-## Description
-### Database - relationships
-* User -> Post
-* Comment -> Post
-* Comment -> Comment
-* User -> User (follow)
-* Like -> Comment
-* User -> Comment
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE) file for details
