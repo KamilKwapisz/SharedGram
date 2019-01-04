@@ -133,7 +133,7 @@ class PostCreateTestCase(TestCase):
         self.assertEqual(response.data['message'], "Success")
 
     @tag('fast')
-    def test_adding_comment_with_invalid_username(self):
+    def test_creating_post_with_invalid_username(self):
         # Given
         payload: dict = {
             "username": "Wrong_username",
@@ -148,3 +148,21 @@ class PostCreateTestCase(TestCase):
         # Then
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response.data['message'], "User with this username doesn't exist")
+
+    # @tag('fast')
+    # def test_adding_comment_with_invalid_photo_uid(self):
+    #     # Given
+    #     payload: dict = {
+    #         "username": self.author.name,
+    #         "name": self.RANDOM_POST_NAME,
+    #         "description": "Testing description",
+    #         "photo_uid": "DEFINITELY_NOT_VALID_UID",
+    #     }
+    #
+    #     # When
+    #     response = self.client.post(reverse('api-post-create'), payload)
+    #
+    #     # Then
+    #     self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+    #     self.assertEqual(response.data['message'], "Photo with this uid doesn't exist")
+
