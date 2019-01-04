@@ -70,7 +70,7 @@ class Comment(StructuredNode):
 class Post(StructuredNode):
     uid = UniqueIdProperty()
     name = StringProperty()
-    author = RelationshipFrom('User', 'AUTHOR')
+    author = RelationshipFrom('User', 'AUTHOR', cardinality=One)
     photo = RelationshipTo('Photo', 'PHOTO', cardinality=One)
     hashtags = RelationshipTo('HashTag', 'TAG')
     description = StringProperty()
