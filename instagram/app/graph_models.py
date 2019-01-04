@@ -53,7 +53,7 @@ class HashTag(StructuredNode):
 
 class Comment(StructuredNode):
     uid = UniqueIdProperty()
-    author = RelationshipFrom('User', 'AUTHOR')
+    author = RelationshipFrom('User', 'AUTHOR', cardinality=One)
     text = StringProperty()
     date = DateTimeProperty(
         default=lambda: datetime.now(pytz.utc)
@@ -70,7 +70,7 @@ class Comment(StructuredNode):
 class Post(StructuredNode):
     uid = UniqueIdProperty()
     name = StringProperty()
-    author = RelationshipFrom('User', 'AUTHOR')
+    author = RelationshipFrom('User', 'AUTHOR', cardinality=One)
     photo = RelationshipTo('Photo', 'PHOTO', cardinality=One)
     hashtags = RelationshipTo('HashTag', 'TAG')
     description = StringProperty()
