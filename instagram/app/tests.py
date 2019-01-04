@@ -6,7 +6,7 @@ from django.urls import reverse
 
 from rest_framework import status
 
-from .graph_models import Post, User, Photo
+from .graph_models import Comment, Post, User, Photo
 
 
 class CommentAddTestCase(TestCase):
@@ -95,12 +95,6 @@ class CommentAddTestCase(TestCase):
 
 
 class PostCreateTestCase(TestCase):
-    """
-  "username" : "admin",
-  "name": "2019",
-  "description": "2018 -> 2019",
-  "photo_uid": "sadasar24vrq"
-    """
 
     def setUp(self):
         self.client = Client(HTTP_USER_AGENT='Mozilla/5.0')
@@ -118,19 +112,24 @@ class PostCreateTestCase(TestCase):
     @tag('fast')
     def test_creating_post_with_proper_data(self):
         # Given
+        description = "Testing description"
         payload: dict = {
             "username": self.author.name,
             "name": self.RANDOM_POST_NAME,
-            "description": "Testing description",
+            "description": description,
             "photo_uid": self.photo.uid,
         }
 
         # When
         response = self.client.post(reverse('api-post-create'), payload)
+        created_post = Post.nodes.get(name=self.RANDOM_POST_NAME)
 
         # Then
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['message'], "Success")
+        self.assertEqual(created_post.author.single().name, self.author.name)
+        self.assertEqual(created_post.description, description)
+        # self.assertEqual(created_post.photo.single().name, self.photo.name) # TODO photos
 
     @tag('fast')
     def test_creating_post_with_invalid_username(self):
