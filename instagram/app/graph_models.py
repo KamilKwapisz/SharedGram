@@ -53,7 +53,7 @@ class HashTag(StructuredNode):
 
 class Comment(StructuredNode):
     uid = UniqueIdProperty()
-    author = RelationshipFrom('User', 'AUTHOR')
+    author = RelationshipFrom('User', 'AUTHOR', cardinality=One)
     text = StringProperty()
     date = DateTimeProperty(
         default=lambda: datetime.now(pytz.utc)
