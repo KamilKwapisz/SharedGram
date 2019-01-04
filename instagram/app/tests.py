@@ -150,7 +150,7 @@ class PostCreateTestCase(TestCase):
         self.assertEqual(response.data['message'], "User with this username doesn't exist")
 
     # @tag('fast')
-    # def test_adding_comment_with_invalid_photo_uid(self):
+    # def test_creating_post_with_invalid_photo_uid(self):
     #     # Given
     #     payload: dict = {
     #         "username": self.author.name,
@@ -166,3 +166,19 @@ class PostCreateTestCase(TestCase):
     #     self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
     #     self.assertEqual(response.data['message'], "Photo with this uid doesn't exist")
 
+    @tag('fast')
+    def test_creating_post_without_obligatory_key(self):
+        # Given
+        payload: dict = {
+            "username": self.author.name,
+            "name": self.RANDOM_POST_NAME,
+            "photo_uid": self.photo.uid,
+        }
+
+        # When
+        response = self.client.post(reverse('api-post-create'), payload)
+        missing_key = "description"
+
+        # Then
+        self.assertEqual(response.status_code, status.HTTP_402_PAYMENT_REQUIRED)
+        self.assertEqual(response.data['message'], f"Invalid request. No '{missing_key}' key in request")
