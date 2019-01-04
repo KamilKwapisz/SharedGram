@@ -1,3 +1,6 @@
+import uu
+import uuid
+
 from django.test import Client, tag, TestCase
 from django.urls import reverse
 
@@ -89,3 +92,42 @@ class CommentAddTestCase(TestCase):
         # Then
         self.assertEqual(response.status_code, status.HTTP_402_PAYMENT_REQUIRED)
         self.assertEqual(response.data['message'], f"Invalid request. No '{missing_key}' key in request")
+
+
+class PostCreateTestCase(TestCase):
+    """
+  "username" : "admin",
+  "name": "2019",
+  "description": "2018 -> 2019",
+  "photo_uid": "sadasar24vrq"
+    """
+
+    def setUp(self):
+        self.client = Client(HTTP_USER_AGENT='Mozilla/5.0')
+        self.PHOTO_NAME = "PHOTO_FOR_TESTS"
+        self.AUTHOR_NAME = "AUTHOR_TESTER"
+        self.RANDOM_POST_NAME = uuid.uuid4()
+        try:
+            self.photo = Photo.nodes.get(name=self.PHOTO_NAME)
+        except Photo.DoesNotExist:
+            self.photo = Photo(name=self.PHOTO_NAME).save()
+            self.author = User(name=self.AUTHOR_NAME).save()
+        else:
+            self.author = User.nodes.get(name=self.AUTHOR_NAME)
+
+    @tag('fast')
+    def test_creating_post_with_proper_data(self):
+        # Given
+        payload: dict = {
+            "username": self.author.name,
+            "name": self.RANDOM_POST_NAME,
+            "description": "Testing description",
+            "photo_uid": self.photo.uid,
+        }
+
+        # When
+        response = self.client.post(reverse('api-post-create'), payload)
+
+        # Then
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['message'], "Success")
