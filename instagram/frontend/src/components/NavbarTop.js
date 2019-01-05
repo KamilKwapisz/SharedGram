@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {PropTypes} from "prop-types";
-var classNames = require('classnames');
+import classNames from "classnames";
 
 class NavbarTop extends Component {
 
