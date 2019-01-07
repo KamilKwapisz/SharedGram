@@ -1,5 +1,7 @@
 import React, {Component} from "react";
 import {PropTypes} from "prop-types";
+import StoryCircle from "./StoryCircle"
+import classNames from "classnames";
 
 class Comment extends Component {
     static propTypes = {
@@ -10,18 +12,25 @@ class Comment extends Component {
     constructor(props){
         super(props);
         //todo: this.props.datetime to xyz minutes/hours/dates ago conversion
-        this.props.datetime = new Date(); //fixme: testing only!
-        this.state = {date: this.props.datetime}
+        //this.props.datetime = new Date(); //fixme: testing only!
+        //this.state = {date: this.props.datetime}
     }
 
     render() {
-        return <div>
-            <p>
-                <b>{this.props.user.name}</b>
-                {this.props.text}
-                <br/>
-                <span className="text-muted">this.state.date.toString()</span>
-            </p>
+        return <div className = "container">
+            <div className = "row">
+                <div className = "col-2">
+                    <StoryCircle user = {{name: this.props.user.name}} activeStory/>
+                </div>
+                <div className = "col-10">
+                    <p>
+                        <b>{this.props.user.name}</b>
+                        {this.props.text}
+                        <br/>
+                        {/*<span className="text-muted">this.state.date.toString()</span>*/}
+                    </p>
+                </div>
+            </div>
         </div>;
     }
 }

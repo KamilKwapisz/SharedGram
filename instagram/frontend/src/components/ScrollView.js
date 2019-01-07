@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {PropTypes} from "prop-types";
-var classNames = require('classnames');
+import classNames from "classnames";
 
 /*
 * Component that displays a profile picture in a circle and a colorful border if a user story is available

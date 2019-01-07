@@ -5,6 +5,7 @@ import Comment from "./Comment";
 import NavbarBot from "./NavbarBot";
 import NavbarTop from "./NavbarTop";
 import ScrollView from "./ScrollView";
+import Post from "./Post";
 
 //import DataProvider from "./DataProvider";
 
@@ -13,9 +14,11 @@ const element = <div className="row container">
     <NavbarBot/>
     <div className="container">
         <div className="row">
-            <ScrollView infinite>
-                <StoryCircle user={{name: "Piotr"}} activeStory/>
-            </ScrollView>
+            <div className="offset-md-3">
+                <ScrollView infinite>
+                    <Post user={{name: "Pioter"}}/>
+                </ScrollView>
+            </div>
         </div>
     </div>
 </div>;
