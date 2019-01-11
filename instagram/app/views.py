@@ -95,24 +95,18 @@ def rest_comment_add(request):
 @api_view(['POST'])
 def rest_follow(request):
     try:
-        author = User.nodes.get(name=request.data['username'])
-        post = Post.nodes.get(uid=request.data['post_uid'])
-        text = request.data['text']
+        follower = User.nodes.get(name=request.data['follower'])
+        following = User.nodes.get(name=request.data['following'])
     except User.DoesNotExist:
         msg = dict(message="User with this username doesn't exist")
-        return Response(msg, status=status.HTTP_403_FORBIDDEN)
-    except Post.DoesNotExist:
-        msg = dict(message="Post with this uid doesn't exist")
         return Response(msg, status=status.HTTP_403_FORBIDDEN)
     except KeyError as e:
         msg = dict(message=f"Invalid request. No {e} key in request")
         return Response(msg, status=status.HTTP_402_PAYMENT_REQUIRED)
-    comment = Comment(text=text).save()
-    comment.author.connect(author)
-    comment.post.connect(post)
-    comment.save()
-    post.comments.connect(comment)
-    post.save()
+    follower.following.connect(following)
+    follower.save()
+    following.followers.connect(follower)
+    following.save()
     return Response({'message': "Success"}, status=status.HTTP_201_CREATED)
 
 
