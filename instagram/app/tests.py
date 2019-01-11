@@ -198,6 +198,7 @@ class FollowTestCase(TestCase):
             self.follower = User(name="follower").save()
             self.following = User(name="following").save()
 
+    @tag('fast')
     def test_adding_follow_with_proper_data(self):
         # Given
         payload: dict = {
@@ -215,3 +216,18 @@ class FollowTestCase(TestCase):
             self.assertEqual(follower.name, self.follower.name)
         for following in self.follower.following.all():
             self.assertEqual(following.name, self.following.name)
+
+    @tag('fast')
+    def test_adding_follow_without_obligatory_key(self):
+        # Given
+        payload: dict = {
+            "follower": self.follower.name,
+        }
+
+        # When
+        response = self.client.post(reverse('api-follow'), payload)
+        missing_key = "following"
+
+        # Then
+        self.assertEqual(response.status_code, status.HTTP_402_PAYMENT_REQUIRED)
+        self.assertEqual(response.data['message'], f"Invalid request. No '{missing_key}' key in request")
