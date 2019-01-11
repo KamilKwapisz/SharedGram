@@ -92,6 +92,24 @@ def rest_comment_add(request):
     return Response({'message': "Success"}, status=status.HTTP_201_CREATED)
 
 
+@api_view(['POST'])
+def rest_follow(request):
+    try:
+        follower = User.nodes.get(name=request.data['follower'])
+        following = User.nodes.get(name=request.data['following'])
+    except User.DoesNotExist:
+        msg = dict(message="User with this username doesn't exist")
+        return Response(msg, status=status.HTTP_403_FORBIDDEN)
+    except KeyError as e:
+        msg = dict(message=f"Invalid request. No {e} key in request")
+        return Response(msg, status=status.HTTP_402_PAYMENT_REQUIRED)
+    follower.following.connect(following)
+    follower.save()
+    following.followers.connect(follower)
+    following.save()
+    return Response({'message': "Success"}, status=status.HTTP_201_CREATED)
+
+
 class RegisterView(View):
     form_class = UserForm
     template_name = "registration/registration.html"

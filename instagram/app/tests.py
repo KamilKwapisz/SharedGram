@@ -181,3 +181,68 @@ class PostCreateTestCase(TestCase):
         # Then
         self.assertEqual(response.status_code, status.HTTP_402_PAYMENT_REQUIRED)
         self.assertEqual(response.data['message'], f"Invalid request. No '{missing_key}' key in request")
+
+
+class FollowTestCase(TestCase):
+    """
+      "follower" : "admin",
+      "following": "admin1"
+    """
+
+    def setUp(self):
+        self.client = Client(HTTP_USER_AGENT='Mozilla/5.0')
+        try:
+            self.follower = User.nodes.get(name="follower")
+            self.following = User.nodes.get(name="following")
+        except User.DoesNotExist:
+            self.follower = User(name="follower").save()
+            self.following = User(name="following").save()
+
+    @tag('fast')
+    def test_adding_follow_with_proper_data(self):
+        # Given
+        payload: dict = {
+            "follower": self.follower.name,
+            "following": self.following.name
+        }
+
+        # When
+        response = self.client.post(reverse('api-follow'), payload)
+
+        # Then
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['message'], "Success")
+        for follower in self.following.followers.all():
+            self.assertEqual(follower.name, self.follower.name)
+        for following in self.follower.following.all():
+            self.assertEqual(following.name, self.following.name)
+
+    @tag('fast')
+    def test_adding_follow_without_obligatory_key(self):
+        # Given
+        payload: dict = {
+            "follower": self.follower.name,
+        }
+
+        # When
+        response = self.client.post(reverse('api-follow'), payload)
+        missing_key = "following"
+
+        # Then
+        self.assertEqual(response.status_code, status.HTTP_402_PAYMENT_REQUIRED)
+        self.assertEqual(response.data['message'], f"Invalid request. No '{missing_key}' key in request")
+
+    @tag('fast')
+    def test_creating_post_with_invalid_username(self):
+        # Given
+        payload: dict = {
+            "follower": self.follower.name,
+            "following": "INVALID USERNAME"
+        }
+
+        # When
+        response = self.client.post(reverse('api-follow'), payload)
+
+        # Then
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.data['message'], "User with this username doesn't exist")

@@ -24,8 +24,8 @@ class Like(StructuredRel):
 class User(StructuredNode):
     uid = UniqueIdProperty()
     name = StringProperty()
-    following = RelationshipTo('User', 'FOLLOWS', model=Follow)
-    followers = RelationshipFrom('User', 'FOLLOWED BY', model=Follow)
+    following = RelationshipFrom('User', 'FOLLOWS', model=Follow)
+    followers = RelationshipTo('User', 'FOLLOWED BY', model=Follow)
     likes = RelationshipTo('Photo', 'LIKES', model=Like)
     posts = RelationshipTo('Post', 'ADDED')
 
