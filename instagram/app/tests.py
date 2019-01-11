@@ -231,3 +231,18 @@ class FollowTestCase(TestCase):
         # Then
         self.assertEqual(response.status_code, status.HTTP_402_PAYMENT_REQUIRED)
         self.assertEqual(response.data['message'], f"Invalid request. No '{missing_key}' key in request")
+
+    @tag('fast')
+    def test_creating_post_with_invalid_username(self):
+        # Given
+        payload: dict = {
+            "follower": self.follower.name,
+            "following": "INVALID USERNAME"
+        }
+
+        # When
+        response = self.client.post(reverse('api-follow'), payload)
+
+        # Then
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.data['message'], "User with this username doesn't exist")
