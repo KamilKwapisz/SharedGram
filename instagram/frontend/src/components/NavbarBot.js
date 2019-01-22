@@ -1,11 +1,9 @@
-import React, {Component} from "react";
-import {PropTypes} from "prop-types";
+import React from "react";
 import classNames from "classnames";
 
-class NavbarBot extends Component {
-
-    render() {
-        return <nav className={classNames("navbar","navbar-expand-lg", "navbar-light", "bg-light", 'fixed-bottom')}>
+const NavbarBot = () => {
+    return(
+        <nav className={classNames("navbar","navbar-expand-lg", "navbar-light", "bg-light", 'fixed-bottom')}>
             <div className="container">
                 <ul className="navbar-nav mr-auto">
                     <li className="nav-item col-sm-5">
@@ -25,8 +23,8 @@ class NavbarBot extends Component {
                     </li>
                 </ul>
             </div>
-        </nav>;
-    }
+        </nav>
+    );
 }
 
 export default NavbarBot;
