@@ -1,18 +1,37 @@
 import React, {Component} from "react";
 import {PropTypes} from "prop-types";
+import moment from 'moment';
 import StoryCircle from "./StoryCircle"
 import classNames from "classnames";
 
-class Comment extends Component {
-    /*static propTypes = {
-        datetime: PropTypes.any.isRequired,
+/*static propTypes = {
+    datetime: PropTypes.any.isRequired,
 
-    };*/
+};*/
+
+class Comment extends Component {
 
     constructor(props){
         super(props);
-        //todo: this.props.datetime to xyz minutes/hours/dates ago conversion
-        this.state = {date: new Date} //fixme: testing only!
+        this.datetime = moment() //fixme: testing only!
+        this.state = {passedTime: moment(this.datetime).fromNow()};
+    }
+
+    componentDidMount() {
+        this.timeKeeper = setInterval(
+            () => this.nowUpdate(),
+            10000
+        );
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timeKeeper)
+    }
+
+    nowUpdate(){
+        this.setState({
+            passedTime: moment(this.datetime).fromNow()
+        });
     }
 
     render() {
@@ -23,13 +42,13 @@ class Comment extends Component {
                 </div>
                 <div className = "col-10">
                     <p>
-                        <b>{this.props.user.name}</b>
-                        {this.props.text}
+                        <b>{this.props.user.name}</b>: {this.props.text}
                         <br/>
-                        <span className="text-muted">{this.state.date.toString()}</span>
+                        <span className="text-muted">{this.state.passedTime}</span>
                     </p>
                 </div>
             </div>
+            <p>{this.datetime.toString()}</p>
         </div>;
     }
 }
