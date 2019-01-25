@@ -5,9 +5,17 @@ import Comment from "./Comment";
 import NavbarBot from "./NavbarBot";
 import NavbarTop from "./NavbarTop";
 import ScrollView from "./ScrollView";
-import Post from "./Post";
+import PostsList from "./PostsList";
 
 //import DataProvider from "./DataProvider";
+
+//Array passed to PostList, for testing only
+const posts = [
+    {name: "Pioter"},
+    {name: "Bartosz"},
+    {name: "Kamil"}
+];
+
 
 const element = <div className="row container">
     <NavbarTop/>
@@ -16,7 +24,7 @@ const element = <div className="row container">
         <div className="row">
             <div className="offset-md-3">
                 <ScrollView infinite>
-                    <Post user={{name: "Pioter"}}/>
+                    <PostsList posts={posts}/>
                 </ScrollView>
             </div>
         </div>
