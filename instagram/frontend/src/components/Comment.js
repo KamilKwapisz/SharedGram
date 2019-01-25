@@ -48,7 +48,6 @@ class Comment extends Component {
                     </p>
                 </div>
             </div>
-            <p>{this.datetime.toString()}</p>
         </div>;
     }
 }
