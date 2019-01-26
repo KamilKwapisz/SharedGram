@@ -37,7 +37,6 @@ class StoryCircle extends Component {
                 className="rounded-circle img-fluid"
                 alt={this.props.user.name}
             />
-            <p>{this.props.user.name}</p>
         </div>;
     }
 }
