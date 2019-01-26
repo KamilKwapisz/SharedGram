@@ -2,10 +2,9 @@ import React from 'react';
 import Post from './Post';
 
 const PostsList = props => {
-    //"Each child in an array or iterator should have a unique "key" prop." Warning needs to be resolved
-    const PostArray = props.posts.map((post) => {
+    const PostArray = props.posts.map((post, i) => { //fixme: 'i' should be replace for some id given by DJango
         return (
-            <Post user={post}/>
+            <Post user={post} key={i} />
         );
     });
 
