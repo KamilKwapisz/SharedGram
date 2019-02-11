@@ -17,19 +17,20 @@ const posts = [
 ];
 
 
-const element = <div className="row container">
-    <NavbarTop/>
-    <NavbarBot/>
-    <div className="container">
-        <div className="row">
-            <div className="offset-md-3">
-                <ScrollView infinite>
-                    <PostsList posts={posts}/>
-                </ScrollView>
+const element =
+    <div className="row container">
+        <NavbarTop/>
+        <NavbarBot/>
+        <div className="container">
+            <div className="row">
+                <div className="offset-md-3">
+                    <ScrollView infinite>
+                        <PostsList posts={posts}/>
+                    </ScrollView>
+                </div>
             </div>
         </div>
-    </div>
-</div>;
+    </div>;
 
 window.onload = ReactDOM.render(
     element,

@@ -28,7 +28,7 @@ class Post extends Component{
                 <div className = "row">
                     <img src = "" alt = "Post"/>
                 </div>
-                <LikeBar />
+                    <LikeBar />
                 <div className = "row">
                     <Comment user = {{name: this.props.user.name}} text = "Comment"/>
                 </div>
