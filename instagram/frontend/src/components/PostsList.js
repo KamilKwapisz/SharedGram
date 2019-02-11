@@ -4,7 +4,7 @@ import Post from './Post';
 const PostsList = props => {
     const PostArray = props.posts.map((post, i) => { //fixme: 'i' should be replace for some id given by DJango
         return (
-            <Post user={post} key={i} />
+            <Post post={post} key={i} />
         );
     });
 

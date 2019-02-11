@@ -7,7 +7,7 @@ import classNames from "classnames";
 
 class Post extends Component{
     static propTypes = {
-        user: PropTypes.object.isRequired
+        post: PropTypes.object.isRequired
     };
 
     constructor(props){
@@ -19,18 +19,18 @@ class Post extends Component{
             <div className = "container">
                 <div className = "row">
                     <div className = "col-2">
-                        <StoryCircle user = {{name: this.props.user.name}} activeStory/>
+                        <StoryCircle user = {{name: this.props.post.name}} activeStory/>
                     </div>
                     <div className = "col-10">
-                         {this.props.user.name}
+                         {this.props.post.name}
                     </div>
                 </div>
                 <div className = "row">
                     <img src = "" alt = "Post"/>
                 </div>
-                    <LikeBar />
+                    <LikeBar initLikes = {this.props.post.likes}/>
                 <div className = "row">
-                    <Comment user = {{name: this.props.user.name}} text = "Comment"/>
+                    <Comment user = {{name: this.props.post.name}} text = "Comment"/>
                 </div>
             </div>
         );
