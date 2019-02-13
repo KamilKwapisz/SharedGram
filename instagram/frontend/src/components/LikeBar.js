@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 
 function LikeBar(props) {
+    //Like fields
     const [liked, setIfLiked] = useState(false);
     const [likes, setLikes] = useState(props.initLikes);
+
+    //Save field
+    const [saved, setIfSaved] = useState(false);
 
     function likeClicked() {
         setIfLiked(true);
@@ -12,6 +16,14 @@ function LikeBar(props) {
     function dislikeClicked() {
         setIfLiked(false);
         setLikes(likes-1);
+    }
+
+    function saveClicked() {
+        setIfSaved(true);
+    }
+
+    function unsaveClicked() {
+        setIfSaved(false);
     }
 
     return(
@@ -51,10 +63,21 @@ function LikeBar(props) {
                     </div>
                 </div>
                 <div className = "col-2">
-                    <button type="button"
-                    className="btn btn-outline-dark">
-                    Save
-                    </button>
+                    {!saved && (
+                        <button type="button"
+                        onClick={saveClicked}
+                        className="btn btn-outline-dark">
+                        Save
+                        </button>
+                    )}
+
+                    {saved && (
+                        <button type="button"
+                        onClick={unsaveClicked}
+                        className="btn btn-outline-dark">
+                        Unsave
+                        </button>
+                    )}
                 </div>
             </div>
             <div className = "row">
