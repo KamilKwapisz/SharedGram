@@ -26,11 +26,15 @@ class Post extends Component{
                     </div>
                 </div>
                 <div className = "row">
-                    <img src = "" alt = "Post"/>
+                    <div className = "col">
+                        <img src = "" alt = "Post"/>
+                    </div>
                 </div>
-                    <LikeBar initLikes = {this.props.post.likes}/>
+                <LikeBar initLikes = {this.props.post.likes}/>
                 <div className = "row">
-                    <Comment user = {{name: this.props.post.name}} text = "Comment"/>
+                    <div className = "col">
+                        <Comment user = {{name: this.props.post.name}} text = "Comment"/>
+                    </div>
                 </div>
             </div>
         );

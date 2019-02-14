@@ -27,7 +27,7 @@ function LikeBar(props) {
     }
 
     return(
-        <div>
+        <div className = "container">
             <div className = "row justify-content-between">
                 <div className = "col-5">
                     <div className = "row">
@@ -81,7 +81,9 @@ function LikeBar(props) {
                 </div>
             </div>
             <div className = "row">
-                Likes: {likes}
+                <div className = "col">
+                    Likes: {likes}
+                </div>
             </div>
         </div>
     );
