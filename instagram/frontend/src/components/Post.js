@@ -30,12 +30,10 @@ class Post extends Component{
                         <img src = "" alt = "Post"/>
                     </div>
                 </div>
-                <LikeBar initLikes = {this.props.post.likes}/>
-                <div className = "row">
-                    <div className = "col">
-                        <Comment user = {{name: this.props.post.name}} text = "Comment"/>
-                    </div>
-                </div>
+                <LikeBar initLikes = {this.props.post.likes}
+                initViews = {this.props.post.views}
+                OP = {this.props.post.name}
+                description = "some text"/>
             </div>
         );
     }

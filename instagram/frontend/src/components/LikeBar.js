@@ -8,6 +8,9 @@ function LikeBar(props) {
     //Save field
     const [saved, setIfSaved] = useState(false);
 
+    //views
+    const [views, setViews] = useState(props.initViews);
+
     function likeClicked() {
         setIfLiked(true);
         setLikes(likes+1);
@@ -81,8 +84,16 @@ function LikeBar(props) {
                 </div>
             </div>
             <div className = "row">
+                <div className = "col-10">
+                    {views} views
+                </div>
                 <div className = "col">
                     Likes: {likes}
+                </div>
+            </div>
+            <div className = "row">
+                <div className = "col">
+                    <p><b>{props.OP}</b> {props.description}</p>
                 </div>
             </div>
         </div>

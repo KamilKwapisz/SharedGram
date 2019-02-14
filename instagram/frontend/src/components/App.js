@@ -11,9 +11,9 @@ import PostsList from "./PostsList";
 
 //Array passed to PostList, for testing only
 const posts = [
-    {name: "Pioter", likes: 10},
-    {name: "Bartosz", likes: 15},
-    {name: "Kamil", likes: 100}
+    {name: "Pioter", likes: 10, views: 100},
+    {name: "Bartosz", likes: 15, views: 500},
+    {name: "Kamil", likes: 100, views: 1000}
 ];
 
 
