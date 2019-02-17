@@ -1,12 +1,19 @@
 from django.contrib import messages
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, logout, login
+from django.contrib.auth import logout, login
 from django.views.decorators.debug import sensitive_post_parameters
 from django.utils.decorators import method_decorator
-from django.urls import reverse_lazy
 from django.views.generic import View
 
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+from .graph_models import *
 from .forms import UserForm
+from .utils import are_passwords_matching, create_post, create_user_node, delete_all_nodes
+
+config.DATABASE_URL = 'bolt://neo4j:password@localhost:7687'
 
 
 def index(request):
@@ -14,54 +21,93 @@ def index(request):
     return render(request, "app/index.html", context)
 
 
+def post_list(request):
+    posts = list()
+    post_nodes = Post.nodes
+    for node in post_nodes:
+        # TODO fixing this so as we don't create new collection each time
+        post = dict(
+            name=node.name,
+            uid=node.uid,
+            description=node.description,
+            photo=node.photo.single().name,
+            author=node.author.single().name,
+            comments=node.comments.all()
+        )
+        posts.append(post)
+        print(node.comments.all())
+    context = dict(posts=posts)
+    return render(request, 'app/post_list.html', context)
+
+
 def graphdb_test(request):
     """Just playground"""
-    from . import graph_models
-
-    # db.set_connection('bolt://neo4j:neo4j@localhost:7687')
-    # config.DATABASE_URL = 'bolt://neo4j:password@localhost:7687'
-    bucky = graph_models.User.nodes.get(name='Bucky')
-    jim = graph_models.User.nodes.get(name="Jim")
-    timmy = graph_models.User(name="Timothy").save()
-    fol = jim.following.connect(bucky).save()
-
-    photo = graph_models.Photo.nodes.get(name="sea")
-    # photo.liked_by.connect(bucky).save()
-    print(photo.likes_number)
-    # rel = jim.friends.connect(User(name="Tim").save(), {'met': 'Warsaw'})
-    # rel = jim.friends.connect(User(name="Bucky").save(), {'met': 'Warsaw'})
-    # rel = jim.friends.connect(User(name="drWilk").save(), {'met': 'Warsaw'})
-    # # print(rel.start_node().name)  # jim
-    # # print(rel.end_node().name)  # bob
-    # rel.met = "Amsterdam"
-    # rel.save()
+    delete_all_nodes(User.nodes.filter(name="admin"))
+    create_user_node("admin")
+    print(User.nodes.get(name="admin"))
     return render(request, "app/index.html", {})
 
 
-def create_and_authenticate_user(form):
-    """
-    Creates user object with cleaned data from django form.
-    Then user is authenticated with credentials provided in form
-    :param form: filled Django form instance
-    :return: user object if everything is correct, None otherwise
-    """
-    user_object = form.save(commit=False)
-    username = form.cleaned_data['username']
-    password = form.cleaned_data['password']
-    user_object.email = username
-    user_object.set_password(password)
-    user_object.save()
-    user = authenticate(username=username, password=password)
-    return user
+@api_view(['POST'])
+def rest_post_create(request):
+    try:
+        author = User.nodes.get(name=request.data['username'])
+        photo = Photo.nodes.get(name="sea")  # temporarily
+        name = request.data['name']
+        description = request.data['description']
+    except User.DoesNotExist:
+        msg = dict(message="User with this username doesn't exist")
+        return Response(msg, status=status.HTTP_403_FORBIDDEN)
+    except Photo.DoesNotExist:
+        msg = dict(message="Photo with this uid doesn't exist")
+        return Response(msg, status=status.HTTP_403_FORBIDDEN)
+    except KeyError as e:
+        msg = dict(message=f"Invalid request. No {e} key in request")
+        return Response(msg, status=status.HTTP_402_PAYMENT_REQUIRED)
+    create_post(name, description, author, photo)
+    return Response({'message': "Success"}, status=status.HTTP_201_CREATED)
 
 
-def are_passwords_matching(form) -> bool:
-    """
-    Checks whether password field and password confirm field have same value
-    :param form: filled Django form instance
-    :return: true if fields have same value, false otherwise
-    """
-    return form.cleaned_data['password'] == form.cleaned_data['password_confirm']
+@api_view(['POST'])
+def rest_comment_add(request):
+    try:
+        author = User.nodes.get(name=request.data['username'])
+        post = Post.nodes.get(uid=request.data['post_uid'])
+        text = request.data['text']
+    except User.DoesNotExist:
+        msg = dict(message="User with this username doesn't exist")
+        return Response(msg, status=status.HTTP_403_FORBIDDEN)
+    except Post.DoesNotExist:
+        msg = dict(message="Post with this uid doesn't exist")
+        return Response(msg, status=status.HTTP_403_FORBIDDEN)
+    except KeyError as e:
+        msg = dict(message=f"Invalid request. No {e} key in request")
+        return Response(msg, status=status.HTTP_402_PAYMENT_REQUIRED)
+    comment = Comment(text=text).save()
+    comment.author.connect(author)
+    comment.post.connect(post)
+    comment.save()
+    post.comments.connect(comment)
+    post.save()
+    return Response({'message': "Success"}, status=status.HTTP_201_CREATED)
+
+
+@api_view(['POST'])
+def rest_follow(request):
+    try:
+        follower = User.nodes.get(name=request.data['follower'])
+        following = User.nodes.get(name=request.data['following'])
+    except User.DoesNotExist:
+        msg = dict(message="User with this username doesn't exist")
+        return Response(msg, status=status.HTTP_403_FORBIDDEN)
+    except KeyError as e:
+        msg = dict(message=f"Invalid request. No {e} key in request")
+        return Response(msg, status=status.HTTP_402_PAYMENT_REQUIRED)
+    follower.following.connect(following)
+    follower.save()
+    following.followers.connect(follower)
+    following.save()
+    return Response({'message': "Success"}, status=status.HTTP_201_CREATED)
 
 
 class RegisterView(View):
@@ -80,6 +126,7 @@ class RegisterView(View):
             if are_passwords_matching(form):
                 user = create_and_authenticate_user(form)
                 if user is not None:
+                    create_user_node(user.username)
                     messages.success(self.request, "User has been created!")
                     login(self.request, user)
                     return redirect('index')

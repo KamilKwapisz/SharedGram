@@ -1,0 +1,13 @@
+{% extends 'app/base.html' %}
+{% block body %}
+<ul>
+    {% for post in posts %}
+    <li>[{{post.photo}}] {{post.name}}: {{post.description}}, ~<b>{{post.author}}</b> <a href="{% url 'comment-create' post.uid %}">+</a></li>
+    <ol>
+        {% for comment in post.comments %}
+        <li>{{comment.text}}</li>
+        {% endfor %}
+    </ol>
+    {% endfor %}
+</ul>
+{% endblock %}

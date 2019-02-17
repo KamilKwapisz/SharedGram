@@ -11,5 +11,11 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('logout/', views.logout_view, name='logout'),
 
+    path('posts/', views.post_list, name="post-list"),
+    path('api/comment/add', views.rest_comment_add, name="api-comment-add"),
+    path('api/post/create', views.rest_post_create, name="api-post-create"),
+    path('api/follow', views.rest_follow, name="api-follow"),
+
     path('test/', views.graphdb_test, name="test"),
+    path('api/', include('rest_framework.urls'))
 ]
