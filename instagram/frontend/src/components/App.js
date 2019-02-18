@@ -18,7 +18,7 @@ const posts = [
 
 
 const element =
-    <div className="row">
+    <div>
         <NavbarTop/>
         <NavbarBot/>
         <ScrollView infinite>
