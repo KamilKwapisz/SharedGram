@@ -3,7 +3,7 @@ import classNames from "classnames";
 
 const NavbarBot = () => {
     return(
-        <nav className={classNames("navbar","navbar-expand-lg", "navbar-light", "bg-light", 'fixed-bottom')}>
+        <nav className={classNames("navbar","navbar-expand-lg", "navbar-light", "bg-light", "fixed-bottom")}>
             <div className="container">
                 <ul className="navbar-nav mr-auto">
                     <li className="nav-item col-sm-5">
