@@ -11,8 +11,10 @@ function Pages(props){
 
     return(
         <div>
-            <NavbarTop/>
-            <NavbarBot/>
+            <NavbarTop changePage={setPageOn}/>
+            <NavbarBot changePage={setPageOn}/>
+            {/*V testing pageswitching*/}
+            Current page: {pageOn}
             <ScrollView infinite>
                 <PostsList posts={props.posts}/>
             </ScrollView>
