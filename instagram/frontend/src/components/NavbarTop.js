@@ -1,26 +1,26 @@
 import React from "react";
+import {NavLink} from "react-router-dom";
 import classNames from "classnames";
 
 function NavbarTop(props) {
-    
+
     return(
         <nav className={classNames("navbar","navbar-expand-lg", "navbar-light", "bg-light", "fixed-top")}>
             <div className="container">
-                <a
+                <NavLink
+                    exact
                     className="navbar-brand"
-                    href="#"
-                    onClick={() => props.changePage("main")}
+                    to="/"
                 >
-                    SharedGram
-                </a>
+                SharedGram
+                </NavLink>
 
-                <a
+                <NavLink
                     className="navbar-text"
-                    href="#"
-                    onClick={() => props.changePage("message")}
+                    to="/message"
                 >
-                    message
-                </a>
+                message
+                </NavLink>
             </div>
         </nav>
     );

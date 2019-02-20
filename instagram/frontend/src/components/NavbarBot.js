@@ -1,4 +1,5 @@
 import React from "react";
+import {NavLink} from "react-router-dom";
 import classNames from "classnames";
 
 function NavbarBot(props) {
@@ -8,49 +9,45 @@ function NavbarBot(props) {
             <div className="container">
                 <ul className="navbar-nav mr-auto">
                     <li className="nav-item col-sm-5">
-                        <a
+                        <NavLink
+                            exact
                             className="nav-link"
-                            href="#"
-                            onClick={() => props.changePage("main")}
+                            to="/"
                         >
-                            Home
-                        </a>
+                        Home
+                        </NavLink>
                     </li>
                     <li className="nav-item col-sm-5">
-                        <a
+                        <NavLink
                             className="nav-link"
-                            href="#"
-                            onClick={() => props.changePage("Search")}
+                            to="/search"
                         >
-                            Search
-                        </a>
+                        Search
+                        </NavLink>
                     </li>
                     <li className="nav-item col-sm-5">
-                        <a
+                        <NavLink
                             className="nav-link"
-                            href="#"
-                            onClick={() => props.changePage("Add")}
+                            to="/add"
                         >
-                            Add
-                        </a>
+                        Add
+                        </NavLink>
                     </li>
                     <li className="nav-item col-sm-5">
-                        <a
+                        <NavLink
                             className="nav-link"
-                            href="#"
-                            onClick={() => props.changePage("Likes")}
+                            to="/likes"
                         >
-                            Likes
-                        </a>
+                        Likes
+                        </NavLink>
                     </li>
                     <li className="nav-item col-sm-5">
-                        <a
+                        <NavLink
                             className="nav-link"
-                            href="#"
-                            onClick={() => props.changePage("Profile")}
+                            to="/profile"
                         >
-                            Profile
-                        </a>
+                        Profile
+                        </NavLink>
                     </li>
                 </ul>
             </div>

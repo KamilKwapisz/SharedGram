@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import {Route, Link, BrowserRouter as Router} from 'react-router-dom';
 import NavbarBot from "./NavbarBot";
 import NavbarTop from "./NavbarTop";
-import ScrollView from "./ScrollView";
-import PostsList from "./PostsList";
+import MainPage from "./MainPage";
+import WIPPage from "./WIPPage";
 
 //here all the page changing will take place
 function Pages(props){
@@ -10,15 +11,19 @@ function Pages(props){
     const[pageOn, setPageOn] = useState("main");
 
     return(
-        <div>
-            <NavbarTop changePage={setPageOn}/>
-            <NavbarBot changePage={setPageOn}/>
-            {/*V testing pageswitching*/}
-            Current page: {pageOn}
-            <ScrollView infinite>
-                <PostsList posts={props.posts}/>
-            </ScrollView>
-        </div>
+        <Router>
+            <div>
+                <NavbarTop />
+                <NavbarBot />
+                <Route exact path="/" component={MainPage} />
+                <Route path="/message" component={WIPPage} />
+                <Route path="/search" component={WIPPage} />
+                <Route path="/add" component={WIPPage} />
+                <Route path="/likes" component={WIPPage} />
+                <Route path="/profile" component={WIPPage} />
+
+            </div>
+        </Router>
     );
 }
 
