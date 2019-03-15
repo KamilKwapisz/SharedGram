@@ -1,11 +1,11 @@
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.contrib.auth import views as auth_views
 
 from instagram.app import views
 
 urlpatterns = [
-    path('', include('instagram.frontend.urls')),
+
     path('admin/', admin.site.urls),
     path('register/', views.RegisterView.as_view(), name='register'),
     path('login/', auth_views.LoginView.as_view(), name='login'),
@@ -17,5 +17,8 @@ urlpatterns = [
     path('api/follow', views.rest_follow, name="api-follow"),
 
     path('test/', views.graphdb_test, name="test"),
-    path('api/', include('rest_framework.urls'))
+    path('api/', include('rest_framework.urls')),
+
+    path('', include('instagram.frontend.urls')),
+    re_path(r'^(?:..*)/?$', include('instagram.frontend.urls'))
 ]
