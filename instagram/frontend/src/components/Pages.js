@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import {Route, Link, Switch, BrowserRouter as Router} from 'react-router-dom';
-import NavbarBot from "./NavbarBot";
-import NavbarTop from "./NavbarTop";
-import MainPage from "./MainPage";
-import WIPPage from "./WIPPage";
-import NotFoundPage from "./NotFoundPage";
+import NavbarBot from "./NavBars/NavbarBot";
+import NavbarTop from "./NavBars/NavbarTop";
+import MainPage from "./SubPages/MainPage";
+import WIPPage from "./SubPages/WIPPage";
+import NotFoundPage from "./SubPages/NotFoundPage";
 
 //here all the page changing will take place
 function Pages(props){

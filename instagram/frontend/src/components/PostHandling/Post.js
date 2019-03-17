@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {PropTypes} from "prop-types";
-import StoryCircle from "./StoryCircle";
+import StoryCircle from "../StoryCircle";
 import Comment from "./Comment";
 import LikeBar from "./LikeBar";
 import classNames from "classnames";

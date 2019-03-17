@@ -1,6 +1,6 @@
 import React from 'react';
-import ScrollView from "./ScrollView";
-import PostsList from "./PostsList";
+import ScrollView from "../PostHandling/ScrollView";
+import PostsList from "../PostHandling/PostsList";
 
 //Array passed to PostList, for testing only
 const posts = [

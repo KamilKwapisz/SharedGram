@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {PropTypes} from "prop-types";
 import moment from 'moment';
-import StoryCircle from "./StoryCircle"
+import StoryCircle from "../StoryCircle"
 import classNames from "classnames";
 
 /*static propTypes = {
