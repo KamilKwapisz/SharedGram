@@ -23,3 +23,14 @@ div .post {
     padding: 5px 0px;
     margin-bottom: 20px;
 }
+
+div .nav-bot {
+    background-color: #f8f9fa;
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+    height: 60px;
+    width: 100%;
+    z-index: 99;
+    padding-top: 10px;
+}
