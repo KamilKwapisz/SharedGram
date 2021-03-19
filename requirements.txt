@@ -3,7 +3,7 @@ chardet==3.0.4
 decorator==4.3.0
 Django==2.1.4
 django-filter==2.0.0
-djangorestframework==3.9.0
+djangorestframework==3.11.2
 idna==2.7
 lucene-querybuilder==0.2
 Markdown==3.0.1
