@@ -11,7 +11,7 @@ neo4j-driver==1.6.2
 neo4jrestclient==2.1.1
 neomodel==3.2.9
 neotime==1.0.0
-pipenv==2018.11.26
+pipenv==2022.1.8
 python-dateutil==2.7.5
 python-decouple==3.1
 pytz==2018.7
