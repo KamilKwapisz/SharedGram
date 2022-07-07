@@ -34,7 +34,7 @@
   "dependencies": {
     "babel-preset-react": "^6.24.1",
     "classnames": "^2.2.6",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "react-router-dom": "^4.3.1"
   }
 }
